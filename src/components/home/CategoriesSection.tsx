@@ -1,11 +1,23 @@
-import type React from "react"
+import React, { useEffect } from "react"
 
-import { categories } from "../../data/categoriesData"
+import { getCategories } from "../../services/categoryService"
 import type { Category } from "../../types/models/Category"
 
 import { Link } from "react-router-dom"
 
 const CategoriesSection: React.FC = () => {
+    const [categories, setCategories] = React.useState<Category[]>([])
+
+    useEffect(() => {
+        getCategories()
+            .then((res) => {
+                setCategories(res.data)
+            })
+            .catch((err) => {
+                console.error("Error fetching categories:", err)
+            })
+    }, [])
+
     return (
         <section className="py-12 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,14 +26,14 @@ const CategoriesSection: React.FC = () => {
                     <p className="text-xl font-light text-gray-600">Explore our wide range of industrial products</p>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {categories.map((category: Category) => (
+                    {categories.map((category) => (
                         <Link
                             key={category.id}
-                            to={category.path}
+                            to={`/products?category=${category.name}`}
                             className="group flex flex-col items-center text-center p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300"
                         >
                             <img 
-                                src={category.img} 
+                                src={`http://localhost:8080${category.imageUrl}`}
                                 alt={category.name}
                                 className="w-40 h-60 object-cover rounded-full mb-2 group-hover:scale-105 transition-transform duration-300"    
                             />
