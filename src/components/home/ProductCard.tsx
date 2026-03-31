@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import type { Product } from "../../types/Product";
+import type { Product } from "../../types/models/Product";
 
 const maxStars = 5
 

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import type { Product } from "../types/Product";
+import type { Product } from "../types/models/Product";
 import { getProducts } from "../services/productService";
 import ProductGrid from "../components/home/ProductGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
+import CategoriesSection from "../components/home/CategoriesSection";
 
 const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -54,6 +55,8 @@ const HomePage: React.FC = () => {
   return (
     <section>
       <HeroCarousel />
+      <CategoriesSection />
+
       <ProductGrid products={products} />
       
     </section>
