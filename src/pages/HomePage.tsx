@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import type { Product } from "../types/models/Product";
 import { getProducts } from "../services/productService";
-import ProductGrid from "../components/home/ProductGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 import CategoriesSection from "../components/home/CategoriesSection";
 import PromoBanner from "../components/home/PromoBanner";
+import ProductGrid from "../components/home/ProductGrid";
+import NewsletterSection from "../components/home/NewsletterSection";
 
 const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,9 +18,9 @@ const HomePage: React.FC = () => {
         const data: Product[] = Array.isArray(res.data) ? res.data : [];
 
         setProducts(
-          data.map((p) => ({
-            ...p,
-            rating: p.rating ?? Math.random() * 2 + 3.5,
+          data.map((product) => ({
+            ...product,
+            rating: product.rating ?? Math.min(5, Math.max(3.5, Math.random() * 2 + 3.5)),
           }))
         );
       })
@@ -29,38 +30,18 @@ const HomePage: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="p-6 min-h-[60vh] flex flex-col items-center justify-center">
-        <div
-          role="status"
-          className="text-center text-gray-600 animate-pulse"
-          aria-live="polite"
-        >
-          <div className="h-4 w-52 bg-gray-200 rounded mb-3 mx-auto" />
-          <div className="h-4 w-40 bg-gray-200 rounded mb-3 mx-auto" />
-          <div className="h-4 w-32 bg-gray-200 rounded mx-auto" />
-          <p className="mt-3 text-sm">Loading products...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <p className="text-lg text-red-600">{error}</p>
-      </div>
-    );
-  }
   return (
-    <section>
+    <main className="space-y-16 lg:space-y-20">
       <HeroCarousel />
-      <CategoriesSection />
-      <PromoBanner />
-      <ProductGrid products={products} />
-      
-    </section>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+        <CategoriesSection />
+        <PromoBanner />
+        <ProductGrid products={products} loading={loading} error={error} />
+      </section>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <NewsletterSection />
+      </section>
+    </main>
   );
 };
 
