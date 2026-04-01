@@ -30,66 +30,60 @@ const renderStars = (rating: number) => {
   ))
 }
 
-export const ProductCard = ({ product}: { product: Product }) => {
-    return (
-        <article
-              className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 ease-out overflow-hidden flex flex-col"
-            >
-              <Link
-                to={`/product/${product.id}`}
-                className="group h-full flex flex-col"
-              >
-                <figure className="relative w-full h-84 overflow-hidden bg-gray-100">
-                  <img
-                    src={`http://localhost:8080${product.imageUrl}`}
-                    alt={product.name}
-                    className="w-full h-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105"
-                    loading="lazy"
-                    aria-label={`${product.name} image`}
-                  />
-                </figure>
+export const ProductCard = ({ product }: { product: Product }) => {
+  return (
+    <article className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
 
-                <div className="p-4 flex-1 flex flex-col">
-                  <span className="inline-block text-xs font-medium text-indigo-700 tracking-wide mb-1">
-                    {product.categoryName ?? "All categories"}
-                  </span>
+      {/* Image */}
+      <div className="relative overflow-hidden">
+        <img
+          src={`http://localhost:8080${product.imageUrl}`}
+          alt={product.name}
+          className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        <span className="absolute top-3 left-3 bg-indigo-600 text-white text-xs px-2 py-1 rounded">
+          NEW
+        </span>
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+          <Link
+            to={`/product/${product.id}`}
+            className="px-4 py-2 bg-white text-black text-sm font-semibold rounded"
+          >
+            View Details
+          </Link>
+        </div>
+      </div>
+      <div className="p-4 flex flex-col flex-1">
+        <span className="text-xs text-indigo-600 font-medium mb-1 uppercase">
+          {product.categoryName ?? "Category"}
+        </span>
 
-                  <h2 className="text-base md:text-lg font-semibold text-slate-900 leading-snug mb-2">
-                    {product.name}
-                  </h2>
+        <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-1 line-clamp-2">
+          {product.name}
+        </h3>
 
-                  {product.description && (
-                    <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-                      {product.description}
-                    </p>
-                  )}
+        <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+          {product.description}
+        </p>
+        <div className="flex items-center mb-2">
+          <div className="flex">{renderStars(product.rating ?? 4)}</div>
+          <span className="text-xs text-gray-500 ml-2">
+            ({(product.rating ?? 4).toFixed(1)})
+          </span>
+        </div>
+        <div className="mt-auto">
+          <p className="text-lg font-bold text-gray-900">
+            LKR. {product.price.toFixed(2)}
+          </p>
+        </div>
+      </div>
 
-                  <div className="flex items-center mb-3 mt-auto">
-                    <div className="flex items-center gap-0.5">
-                      {renderStars(product.rating ?? 4)}
-                    </div>
-                    <span className="text-xs text-gray-500 ml-2">
-                      ({(product.rating ?? 4).toFixed(1)})
-                    </span>
-                  </div>
-
-                  <p className="text-xl font-bold text-slate-900 mb-4">
-                    ₹ {product.price.toFixed(2)}
-                  </p>
-                </div>
-              </Link>
-
-              <div className="p-4 border-t border-gray-100">
-                <button
-                  type="button"
-                  className="w-full px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
-                  aria-label={`Add ${product.name} to cart`}
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </article>
-    )
-}
-
-export default ProductCard
+      {/* Button */}
+      <div className="p-4 pt-0">
+        <button className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition">
+          Add to Cart
+        </button>
+      </div>
+    </article>
+  );
+};
