@@ -31,14 +31,16 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <main className="space-y-16 lg:space-y-20">
+    <main className="bg-slate-50 text-slate-900">
       <HeroCarousel />
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+
+      <section className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 space-y-16">
         <CategoriesSection />
         <PromoBanner />
         <ProductGrid products={products} loading={loading} error={error} />
       </section>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <section className="max-w-7xl mx-auto px-4 pb-20 sm:px-6 lg:px-8">
         <NewsletterSection />
       </section>
     </main>
