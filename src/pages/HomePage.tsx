@@ -4,6 +4,7 @@ import { getProducts } from "../services/productService";
 import ProductGrid from "../components/home/ProductGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 import CategoriesSection from "../components/home/CategoriesSection";
+import PromoBanner from "../components/home/PromoBanner";
 
 const HomePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -56,7 +57,7 @@ const HomePage: React.FC = () => {
     <section>
       <HeroCarousel />
       <CategoriesSection />
-
+      <PromoBanner />
       <ProductGrid products={products} />
       
     </section>
