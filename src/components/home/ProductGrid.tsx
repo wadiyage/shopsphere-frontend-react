@@ -3,16 +3,17 @@ import type { Product } from "../../types/models/Product";
 import { ProductCard } from "./ProductCard";
 
 type ProductGridProps = {
-  products: Product[];
-  loading?: boolean;
-  error?: string | null;
+  products: Product[]
+  loading?: boolean
+  error?: string | null
+  onAddToCart?: (product: Product) => void
 };
 
 const sortOptions = [
   "Sort by",
   "Price: Low to High",
   "Price: High to Low",
-  "Top Rated",
+  "Top Rated"
 ];
 
 const ProductGrid = ({ products, loading = false, error = null }: ProductGridProps) => {
@@ -86,7 +87,10 @@ const ProductGrid = ({ products, loading = false, error = null }: ProductGridPro
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {previewProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard 
+                key={product.id} 
+                product={product}
+              />
             ))}
           </div>
         )}

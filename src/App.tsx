@@ -1,17 +1,36 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
 import MainLayout from './layouts/MainLayout';
+import HomePage from './pages/HomePage';
+import ProductDetailsPage from './pages/ProductDetailsPage';
+import { CartProvider } from './context/CartContext';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  console.log("App rendered")
   return (
     <BrowserRouter>
-      <MainLayout>
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/product/:id' element={<ProductPage />} />
-        </Routes>
-      </MainLayout>
+      <CartProvider>
+        <MainLayout>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/product/:id' element={<ProductDetailsPage />} />
+          </Routes>
+
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </MainLayout>
+      </CartProvider>
     </BrowserRouter>
   );
 }
