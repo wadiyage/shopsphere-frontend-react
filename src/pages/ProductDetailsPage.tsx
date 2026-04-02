@@ -9,7 +9,7 @@ interface Product {
   description?: string
 }
 
-const ProductPage: React.FC = () => {
+const ProductDetailsPage: React.FC = () => {
   const { id } = useParams()
   const [product, setProduct] = useState<Product | null>(null)
 
@@ -36,4 +36,4 @@ const ProductPage: React.FC = () => {
   );
 };
 
-export default ProductPage;
+export default ProductDetailsPage;

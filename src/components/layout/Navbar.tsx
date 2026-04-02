@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
 import logo from '../../assets/logos/shopsphere.png'
+import { useCart } from '../../context/CartContext'
 
 const navigation = [
   { name: 'Home', path: '/' },
@@ -16,7 +17,6 @@ const navigation = [
   { name: 'Cart', path: '/cart' },
 ]
 
-const cartItemCount = 3
 const isLoggedIn = false // Replace with actual authentication logic
 
 function classNames(...classes: Array<string | false | undefined>) {
@@ -25,6 +25,12 @@ function classNames(...classes: Array<string | false | undefined>) {
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
+
+  const { cartItems } = useCart()
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  )
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 16)
