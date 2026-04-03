@@ -48,7 +48,13 @@ export const CartProvider = ({children}: {children: ReactNode}) => {
     }
 
     useEffect(() => {
-        fetchCart()
+        const token =  localStorage.getItem('token')
+        if(token) {
+            console.log("Token found, fetching cart items: ", token)
+            fetchCart()
+        } else {
+            console.log("No token found, skipping cart fetch")
+        }
     }, [])
 
 

@@ -7,6 +7,7 @@ import { CartProvider } from './context/CartContext';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
   console.log("App rendered")
@@ -16,6 +17,8 @@ function App() {
         <MainLayout>
           <Routes>
             <Route path='/' element={<HomePage />} />
+            <Route path='/login' element={<LoginPage />} />
+
             <Route path='/products' element={<ProductListingPage />} />
             <Route path='/product/:id' element={<ProductDetailsPage />} />
           </Routes>

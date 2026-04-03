@@ -48,7 +48,7 @@ const ProductInfo = ({ product }: { product: Product }) => {
 
                         if (!stockUnavailable) {
                             try {
-                                addToCart(product.id, 1)
+                                await addToCart(product.id, 1)
 
                                 toast.success(`${product.name} added to cart!`, {
                                     position: "top-right",
