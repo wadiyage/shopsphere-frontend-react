@@ -49,7 +49,7 @@ export default function Navbar() {
         <>
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4">
-              <NavLink to="/" className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-slate-300/40 rounded-2xl">
+              <NavLink to="/" className="flex items-center gap-3 rounded-2xl">
                 <div className="flex h-12 w-12 items-center justify-center rounded-3xl border border-white/10 bg-white/10 shadow-sm shadow-slate-950/10">
                   <img src={logo} alt="ShopSphere" className="h-8 w-auto" />
                 </div>
