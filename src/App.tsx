@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import ProductListingPage from './pages/ProductListingPage';
 import { CartProvider } from './context/CartContext';
 
 import { ToastContainer } from 'react-toastify';
@@ -15,6 +16,7 @@ function App() {
         <MainLayout>
           <Routes>
             <Route path='/' element={<HomePage />} />
+            <Route path='/products' element={<ProductListingPage />} />
             <Route path='/product/:id' element={<ProductDetailsPage />} />
           </Routes>
 

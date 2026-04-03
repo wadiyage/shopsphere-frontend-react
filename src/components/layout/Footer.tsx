@@ -55,10 +55,6 @@ const socialLinks = [
     }
 ]
 
-const companyLinks = [
-    { title: 'About Us', path: '/about' }
-]
-
 const Footer = () => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
