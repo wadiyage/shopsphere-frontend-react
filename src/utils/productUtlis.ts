@@ -1,5 +1,5 @@
 import type { Product } from "../types/models/Product";
-import type { FilterState, SortOption } from "../types/filters";
+import type { FilterState, SortOption } from "../types/ui/filters";
 
 const debounce = <T extends unknown[]>(
   func: (...args: T) => void,
