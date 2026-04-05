@@ -8,8 +8,9 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
-import logo from '../../assets/logos/shopsphere.png'
 import { useCart } from '../../context/CartContext'
+
+import logo from '../../assets/logo/shopsphere.png'
 
 const navigation = [
   { name: 'Home', path: '/' },

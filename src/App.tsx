@@ -8,33 +8,37 @@ import { CartProvider } from './context/CartContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoginPage } from './pages/LoginPage';
+import AuthLayout from './layouts/AuthLayout';
 
 function App() {
-  console.log("App rendered")
   return (
     <BrowserRouter>
       <CartProvider>
-        <MainLayout>
-          <Routes>
+        <Routes>
+
+          <Route element={<MainLayout />}>
             <Route path='/' element={<HomePage />} />
-            <Route path='/login' element={<LoginPage />} />
 
             <Route path='/products' element={<ProductListingPage />} />
             <Route path='/product/:id' element={<ProductDetailsPage />} />
-          </Routes>
+          </Route>
 
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </MainLayout>
+          <Route element={<AuthLayout />}>
+            <Route path='/login' element={<LoginPage />} />
+          </Route>
+        </Routes>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </CartProvider>
     </BrowserRouter>
   );
