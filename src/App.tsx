@@ -7,17 +7,29 @@ import { CartProvider } from './context/CartContext';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoginPage } from './pages/LoginPage';
+import AuthLayout from './layouts/AuthLayout';
+import { AuthProvider } from './context/AuthContext';
+import { RegisterPage } from './pages/RegisterPage';
 
 function App() {
-  console.log("App rendered")
   return (
     <BrowserRouter>
-      <CartProvider>
-        <MainLayout>
+      <AuthProvider>
+        <CartProvider>
           <Routes>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/products' element={<ProductListingPage />} />
-            <Route path='/product/:id' element={<ProductDetailsPage />} />
+
+            <Route element={<MainLayout />}>
+              <Route path='/' element={<HomePage />} />
+
+              <Route path='/products' element={<ProductListingPage />} />
+              <Route path='/product/:id' element={<ProductDetailsPage />} />
+            </Route>
+
+            <Route element={<AuthLayout />}>
+              <Route path='/register' element={<RegisterPage />} />
+              <Route path='/login' element={<LoginPage />} />
+            </Route>
           </Routes>
 
           <ToastContainer
@@ -31,8 +43,8 @@ function App() {
             draggable
             pauseOnHover
           />
-        </MainLayout>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

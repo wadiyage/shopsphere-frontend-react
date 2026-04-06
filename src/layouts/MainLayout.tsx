@@ -1,14 +1,15 @@
-import type React from "react"
 import Navbar from "../components/layout/Navbar"
 import Footer from "../components/layout/Footer"
+import { Outlet } from "react-router-dom"
 
-const MainLayout = ({children}: {children: React.ReactNode}) => {
-  return (  
+const MainLayout = () => {
+  return (
     <div>
-        <Navbar />
-        <main>{children}</main>
-        
-        <Footer />
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   )
 }

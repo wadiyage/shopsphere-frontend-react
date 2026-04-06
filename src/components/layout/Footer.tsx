@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpIcon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
-import logo from '../../assets/logos/shopsphere.png'
+import logo from '../../assets/logo/shopsphere.png'
 
 const quickLinks = [
     { title: 'All Products', path: '/products' },

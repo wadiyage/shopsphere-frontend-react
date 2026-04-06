@@ -9,7 +9,7 @@ import ProductHeader from "../components/product-listings/ProductHeader"
 import ProductListingGrid from "../components/product-listings/ProductListingGrid"
 import { extractCategories, filterProducts, sortProducts } from "../utils/productUtlis"
 import ProductFilters from "../components/product-listings/ProductFilters"
-import type { FilterState, SortOption } from "../types/filters"
+import type { FilterState, SortOption } from "../types/ui/filters"
 
 const ProductListingPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])

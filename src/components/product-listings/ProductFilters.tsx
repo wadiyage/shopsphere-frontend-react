@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { debounce } from "../../utils/productUtlis";
-import type { FilterState, SortOption } from "../../types/filters";
+import type { FilterState, SortOption } from "../../types/ui/filters";
 
 interface Props {
     filters: FilterState

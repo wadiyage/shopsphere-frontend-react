@@ -1,35 +1,75 @@
-import { createContext, useContext, useState } from "react";
-import type { Product } from "../types/models/Product";
-
-type CartItem = Product & { quantity: number }
-
-type CartContextType = {
-    cartItems: CartItem[]
-    addToCart: (product: Product) => void
-}
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { CartContextType } from "../types/state/CartContextType";
+import type { CartItem } from "../types/models/CartItem";
+import { 
+    getCartItems, 
+    addToCart as addToCartService, 
+    updateCartItem as updateCartItemService, 
+    removeFromCart as removeFromCartService, 
+    clearCart as clearCartService
+} from "../services/cartService";
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
-export const CartProvider = ({children}: {children: React.ReactNode}) => {
+export const CartProvider = ({children}: {children: ReactNode}) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([])
+    const [loading, setLoading] = useState(false)
 
-    const addToCart = (product: Product) => {
-        setCartItems((prev) => {
-            const exiting = prev.find((item) => item.id === product.id)
-
-            if (exiting) {
-                return prev.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                )
-            }
-
-            return [...prev, { ...product, quantity: 1 }]
-        })
+    const fetchCart = async () => {
+        try {
+            setLoading(true)
+            const res = await getCartItems()
+            setCartItems(res.data)
+        } catch (error) {
+            console.error("Failed to fetch cart items", error)
+        } finally {
+            setLoading(false)
+        }
     }
+
+    const addToCart = async (productId: number, quantity: number = 1) => {
+        await addToCartService(productId, quantity)
+        await fetchCart()
+    }
+
+    const updateCartItem = async (cartItemId: number, quantity: number) => {
+        await updateCartItemService(cartItemId, quantity)
+        await fetchCart()
+    }
+
+    const removeFromCart = async (cartItemId: number) => {
+        await removeFromCartService(cartItemId)
+        await fetchCart()
+    }
+
+    const clearCart = async () => {
+        await clearCartService()
+        setCartItems([])
+    }
+
+    useEffect(() => {
+        const token =  localStorage.getItem('token')
+        if(token) {
+            console.log("Token found, fetching cart items: ", token)
+            fetchCart()
+        } else {
+            console.log("No token found, skipping cart fetch")
+        }
+    }, [])
+
+
     return (
-        <CartContext.Provider value={{cartItems, addToCart}}>
+        <CartContext.Provider
+            value={{
+                cartItems, 
+                loading,
+                fetchCart,
+                addToCart, 
+                updateCartItem, 
+                removeFromCart, 
+                clearCart
+            }}
+        >
             {children}
         </CartContext.Provider>
     )

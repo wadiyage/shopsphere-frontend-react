@@ -69,18 +69,34 @@ export const ProductCard = React.memo(({ product }: { product: Product }) => {
               ? "border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
               : "bg-linear-to-r from-slate-950 via-slate-800 to-slate-950 text-white shadow-lg shadow-slate-950/10 hover:-translate-y-0.5 hover:shadow-xl cursor-pointer"
               }`}
-            onClick={(e) => {
-              if (!stockUnavailable) {
-                addToCart(product)
-                toast.success(`${product.name} added to cart!`, {
-                  position: "top-right",
-                  autoClose: 3000,
-                });
+            onClick={async (e) => {
+              e.preventDefault()
 
+              if (!stockUnavailable) {
+                try {
+                  await addToCart(product.id, 1)
+
+                  toast.success(`${product.name} added to cart!`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                  });
+                } catch (error: any) {
+                  console.error("Failed to add product to cart", error)
+                  
+                  if(error.response) {
+                    console.error("Response data:", error.response.data)
+                    console.error("Response status:", error.response.status)
+                  }
+                  toast.error("Failed to add product to cart.");
+                }
               }
             }}
           >
-            {stockUnavailable ? "Unavailable" : "Add to cart"}
+            {
+              product.stockQuantity && product.stockQuantity > 0
+                ? "Add to cart"
+                : "Unavailable"
+            }
           </button>
         </div>
       </div>
