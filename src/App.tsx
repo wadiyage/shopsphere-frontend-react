@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { LoginPage } from './pages/LoginPage';
 import AuthLayout from './layouts/AuthLayout';
 import { AuthProvider } from './context/AuthContext';
+import { RegisterPage } from './pages/RegisterPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             </Route>
 
             <Route element={<AuthLayout />}>
+              <Route path='/register' element={<RegisterPage />} />
               <Route path='/login' element={<LoginPage />} />
             </Route>
           </Routes>

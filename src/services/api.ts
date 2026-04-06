@@ -5,7 +5,7 @@ const API = axios.create({
 })
 
 API.interceptors.request.use((config) => {
-    const token =  localStorage.getItem("token")//  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWRpeWFnZTIyMUBnbWFpbC5jb20iLCJpYXQiOjE3NzUyMzE2MTgsImV4cCI6MTc3NTIzNTIxOH0.xpAAlSbqqMY4L7rTfpyLw5XV1tPHD9zWzexhYdzinrE"
+    const token = localStorage.getItem("token") //  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3YWRpeWFnZTIyMUBnbWFpbC5jb20iLCJpYXQiOjE3NzUyMzE2MTgsImV4cCI6MTc3NTIzNTIxOH0.xpAAlSbqqMY4L7rTfpyLw5XV1tPHD9zWzexhYdzinrE"
     console.log("Attaching token to request:", token)
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
@@ -14,10 +14,11 @@ API.interceptors.request.use((config) => {
 })
 
 export const login = async (email: string, password: string) => {
-    const res = await API.post("/auth/login", { email, password })
+    return await API.post("/auth/login", { email, password })
+}
 
-    localStorage.setItem("token", res.data.token)
-    return res
+export const register = async (firstName: string, lastName: string, email: string, password: string) => {
+    return await API.post("/auth/register", { firstName, lastName, email, password })
 }
 
 export default API;
