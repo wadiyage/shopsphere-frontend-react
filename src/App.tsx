@@ -9,37 +9,40 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoginPage } from './pages/LoginPage';
 import AuthLayout from './layouts/AuthLayout';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <Routes>
+      <AuthProvider>
+        <CartProvider>
+          <Routes>
 
-          <Route element={<MainLayout />}>
-            <Route path='/' element={<HomePage />} />
+            <Route element={<MainLayout />}>
+              <Route path='/' element={<HomePage />} />
 
-            <Route path='/products' element={<ProductListingPage />} />
-            <Route path='/product/:id' element={<ProductDetailsPage />} />
-          </Route>
+              <Route path='/products' element={<ProductListingPage />} />
+              <Route path='/product/:id' element={<ProductDetailsPage />} />
+            </Route>
 
-          <Route element={<AuthLayout />}>
-            <Route path='/login' element={<LoginPage />} />
-          </Route>
-        </Routes>
+            <Route element={<AuthLayout />}>
+              <Route path='/login' element={<LoginPage />} />
+            </Route>
+          </Routes>
 
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </CartProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

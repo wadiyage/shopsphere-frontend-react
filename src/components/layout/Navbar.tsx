@@ -4,11 +4,12 @@ import {
   Bars3Icon,
   MagnifyingGlassIcon,
   ShoppingBagIcon,
-  UserCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
+
+import { useAuth } from '../../context/AuthContext'
 
 import logo from '../../assets/logo/shopsphere.png'
 
@@ -18,13 +19,12 @@ const navigation = [
   { name: 'Cart', path: '/cart' },
 ]
 
-const isLoggedIn = false // Replace with actual authentication logic
-
 function classNames(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+  const { isAuthenticated, user, logout } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
 
   const { cartItems } = useCart()
@@ -109,7 +109,7 @@ export default function Navbar() {
                 </span>
               </NavLink>
 
-              {!isLoggedIn ? (
+              {!isAuthenticated ? (
                 <NavLink
                   to="/login"
                   className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-semibold text-slate-100 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30"
@@ -120,7 +120,11 @@ export default function Navbar() {
                 <Menu as="div" className="relative">
                   <Menu.Button className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition duration-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30">
                     <span className="sr-only">Open profile menu</span>
-                    <UserCircleIcon className="h-6 w-6" aria-hidden="true" />
+                    <div className='h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium'>
+                      {
+                        user?.email?.charAt(0).toUpperCase() || 'U'
+                      }
+                    </div>
                   </Menu.Button>
 
                   <Transition
@@ -161,15 +165,15 @@ export default function Navbar() {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <button
+                            onClick={logout}
                             className={classNames(
-                              'block px-4 py-2 text-sm transition',
+                              'block w-full text-left px-4 py-2 text-sm transition',
                               active ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
                             Sign out
-                          </a>
+                          </button>
                         )}
                       </Menu.Item>
                     </Menu.Items>
@@ -223,12 +227,24 @@ export default function Navbar() {
               </div>
 
               <div>
-                <NavLink
-                  to="/login"
-                  className="block rounded-full border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-slate-100 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
-                >
-                  Login
-                </NavLink>
+                {!isAuthenticated ? (
+                  <NavLink
+                    to="/login"
+                    className="block rounded-full border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-slate-100 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
+                  >
+                    Login
+                  </NavLink>
+                ) : (
+                  <button
+                    onClick={logout}
+                    className={classNames(
+                      'block w-full text-left px-4 py-2 text-sm transition'
+                    )}
+                  >
+                    Sign out
+                  </button>
+
+                )}
               </div>
             </div>
           </Disclosure.Panel>

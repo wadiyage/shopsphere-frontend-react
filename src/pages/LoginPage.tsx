@@ -3,6 +3,9 @@ import { NavLink, useNavigate } from "react-router-dom"
 import { login } from "../services/api"
 import { toast } from "react-toastify"
 
+import { useAuth } from "../context/AuthContext"
+
+
 import ShoppingExperience from "../assets/images/auth/stephen-andrews-Cn4Hyb4nW5I-unsplash.jpg"
 
 import logo  from "../assets/logo/shopsphere.png"
@@ -13,6 +16,8 @@ interface FormErrors {
 }
 
 export const LoginPage = () => {
+    const { loginUser } = useAuth()
+    
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
@@ -44,7 +49,10 @@ export const LoginPage = () => {
 
         try {
             const res = await login(email, password)
-            console.log("Login successful, token: ", res.data.token)
+            
+            loginUser(res.data.token, {
+                email: email
+            })
 
             toast.success("Logged in successfully!")
             navigate("/")
