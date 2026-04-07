@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 
-import { login, register } from "../services/api"
+import { login, register } from "../services/authService"
 
 
 import { toast } from "react-toastify"
