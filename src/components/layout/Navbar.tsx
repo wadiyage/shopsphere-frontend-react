@@ -16,7 +16,7 @@ import logo from '../../assets/logo/shopsphere.png'
 const navigation = [
   { name: 'Home', path: '/' },
   { name: 'Products', path: '/products' },
-  { name: 'Cart', path: '/cart' },
+  { name: 'Cart', path: '/user/cart' },
 ]
 
 function classNames(...classes: Array<string | false | undefined>) {
@@ -144,12 +144,12 @@ export default function Navbar() {
                       </div>
                       <div className='my-1 h-px bg-white/10' />
                       <MenuItem>
-                        {({ active }) => (
+                        {({ focus }) => (
                           <NavLink
-                            to="/orders"
+                            to="/user/orders"
                             className={classNames(
                               'block px-4 py-2 text-sm transition',
-                              active ? 'bg-white/5 text-white' : 'text-slate-300'
+                              focus ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
                             My Orders
@@ -157,12 +157,12 @@ export default function Navbar() {
                         )}
                       </MenuItem>
                       <MenuItem>
-                        {({ active }) => (
+                        {({ focus }) => (
                           <NavLink
                             to="/settings"
                             className={classNames(
                               'block px-4 py-2 text-sm transition',
-                              active ? 'bg-white/5 text-white' : 'text-slate-300'
+                              focus ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
                             Profile

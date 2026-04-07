@@ -13,6 +13,8 @@ import { AuthProvider } from './context/AuthContext';
 import { RegisterPage } from './pages/RegisterPage';
 import PublicRoute from './routes/PublicRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
+import OrdersPage from './pages/OrdersPage';
+import { CartPage } from './pages/CartPage';
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
 
               <Route path='/products' element={<ProductListingPage />} />
               <Route path='/product/:id' element={<ProductDetailsPage />} />
+
+              <Route path='/user/cart' element={<CartPage />} />
+              <Route path='/user/orders' element={<OrdersPage />} />
             </Route>
 
             <Route element={<PublicRoute />}>

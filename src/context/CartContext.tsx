@@ -1,17 +1,17 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { CartContextType } from "../types/state/CartContextType";
 import type { CartItem } from "../types/models/CartItem";
-import { 
-    getCartItems, 
-    addToCart as addToCartService, 
-    updateCartItem as updateCartItemService, 
-    removeFromCart as removeFromCartService, 
+import {
+    getCartItems,
+    addToCart as addToCartService,
+    updateCartItem as updateCartItemService,
+    removeFromCart as removeFromCartService,
     clearCart as clearCartService
 } from "../services/cartService";
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
-export const CartProvider = ({children}: {children: ReactNode}) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([])
     const [loading, setLoading] = useState(false)
 
@@ -33,8 +33,20 @@ export const CartProvider = ({children}: {children: ReactNode}) => {
     }
 
     const updateCartItem = async (cartItemId: number, quantity: number) => {
-        await updateCartItemService(cartItemId, quantity)
-        await fetchCart()
+        setCartItems(prev =>
+            prev.map(item =>
+                item.id === cartItemId
+                    ? { ...item, quantity, totalPrice: item.productPrice * quantity }
+                    : item
+            )
+        )
+
+        try {
+            await updateCartItemService(cartItemId, quantity)
+        } catch (error) {
+            fetchCart()
+        }
+        
     }
 
     const removeFromCart = async (cartItemId: number) => {
@@ -48,8 +60,8 @@ export const CartProvider = ({children}: {children: ReactNode}) => {
     }
 
     useEffect(() => {
-        const token =  localStorage.getItem('token')
-        if(token) {
+        const token = localStorage.getItem('token')
+        if (token) {
             console.log("Token found, fetching cart items: ", token)
             fetchCart()
         } else {
@@ -61,12 +73,12 @@ export const CartProvider = ({children}: {children: ReactNode}) => {
     return (
         <CartContext.Provider
             value={{
-                cartItems, 
+                cartItems,
                 loading,
                 fetchCart,
-                addToCart, 
-                updateCartItem, 
-                removeFromCart, 
+                addToCart,
+                updateCartItem,
+                removeFromCart,
                 clearCart
             }}
         >
@@ -77,6 +89,6 @@ export const CartProvider = ({children}: {children: ReactNode}) => {
 
 export const useCart = () => {
     const context = useContext(CartContext)
-    if(!context) throw new Error("useCart must be used within a CartProvider")
+    if (!context) throw new Error("useCart must be used within a CartProvider")
     return context
 }
