@@ -15,8 +15,7 @@ import logo from '../../assets/logo/shopsphere.png'
 
 const navigation = [
   { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products' },
-  { name: 'Cart', path: '/user/cart' },
+  { name: 'Products', path: '/products' }
 ]
 
 function classNames(...classes: Array<string | false | undefined>) {
@@ -101,7 +100,7 @@ export default function Navbar() {
               </div>
 
               <NavLink
-                to="/cart"
+                to="/user/cart"
                 className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-100 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30"
                 aria-label="View cart"
               >

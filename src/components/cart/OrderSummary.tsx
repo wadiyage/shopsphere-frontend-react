@@ -26,7 +26,6 @@ const OrderSummary = ({
     return (
         <aside className="lg:sticky lg:top-6 lg:h-fit">
             <div className="space-y-4">
-                {/* Summary Card */}
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                     <h2 className="text-lg font-bold text-slate-950">Order Summary</h2>
 
@@ -43,7 +42,6 @@ const OrderSummary = ({
                         </div>
                     </div>
 
-                    {/* Grand Total */}
                     <div className="mt-6">
                         <div className="flex items-center justify-between">
                             <span className="font-semibold text-slate-700">Grand Total</span>
@@ -53,7 +51,6 @@ const OrderSummary = ({
                         </div>
                     </div>
 
-                    {/* CTA Buttons */}
                     <div className="mt-6 space-y-3">
                         <button
                             type="button"
@@ -74,7 +71,6 @@ const OrderSummary = ({
                     </div>
                 </div>
 
-                {/* Info Card */}
                 <div className="rounded-2xl border border-slate-200 bg-blue-50 p-5">
                     <p className="flex items-start gap-2 text-xs text-blue-900">
                         <span className="text-sm">ℹ️</span>
