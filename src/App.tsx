@@ -11,6 +11,8 @@ import { LoginPage } from './pages/LoginPage';
 import AuthLayout from './layouts/AuthLayout';
 import { AuthProvider } from './context/AuthContext';
 import { RegisterPage } from './pages/RegisterPage';
+import PublicRoute from './routes/PublicRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 function App() {
   return (
@@ -26,26 +28,34 @@ function App() {
               <Route path='/product/:id' element={<ProductDetailsPage />} />
             </Route>
 
-            <Route element={<AuthLayout />}>
-              <Route path='/register' element={<RegisterPage />} />
-              <Route path='/login' element={<LoginPage />} />
+            <Route element={<PublicRoute />}>
+              <Route element={<AuthLayout />}>
+                <Route path='/register' element={<RegisterPage />} />
+                <Route path='/login' element={<LoginPage />} />
+              </Route>
             </Route>
-          </Routes>
 
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </CartProvider>
-      </AuthProvider>
-    </BrowserRouter>
+            <Route element={<ProtectedRoute />}>
+              <Route element={<MainLayout />}>
+              </Route>
+            </Route>
+            
+      </Routes>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </CartProvider>
+      </AuthProvider >
+    </BrowserRouter >
   );
 }
 

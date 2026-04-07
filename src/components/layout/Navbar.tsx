@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   ShoppingBagIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
 
 import { useAuth } from '../../context/AuthContext'
@@ -39,6 +39,8 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const navigate = useNavigate()
 
   return (
     <Disclosure as="nav" className={classNames(
@@ -118,14 +120,14 @@ export default function Navbar() {
                 </NavLink>
               ) : (
                 <Menu as="div" className="relative">
-                  <Menu.Button className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition duration-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30">
+                  <MenuButton className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition duration-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30">
                     <span className="sr-only">Open profile menu</span>
                     <div className='h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium'>
                       {
                         user?.email?.charAt(0).toUpperCase() || 'U'
                       }
                     </div>
-                  </Menu.Button>
+                  </MenuButton>
 
                   <Transition
                     as={Fragment}
@@ -136,21 +138,25 @@ export default function Navbar() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-50 mt-2 w-48 origin-top-right overflow-hidden rounded-3xl border border-white/10 bg-slate-950/95 py-2 shadow-2xl shadow-slate-950/30 backdrop-blur-xl ring-1 ring-white/5">
-                      <Menu.Item>
+                    <MenuItems className="absolute right-0 z-50 mt-2 w-auto origin-top-right overflow-hidden rounded-3xl border border-white/10 bg-slate-950/95 py-2 shadow-2xl shadow-slate-950/30 backdrop-blur-xl ring-1 ring-white/5 focus:outline-none">
+                      <div className='px-4 py-2 text-xs text-slate-400'>
+                        Signed in as <span className='text-sm font-medium text-white truncate'>{user?.email}</span>
+                      </div>
+                      <div className='my-1 h-px bg-white/10' />
+                      <MenuItem>
                         {({ active }) => (
                           <NavLink
-                            to="/profile"
+                            to="/orders"
                             className={classNames(
                               'block px-4 py-2 text-sm transition',
                               active ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
-                            Your profile
+                            My Orders
                           </NavLink>
                         )}
-                      </Menu.Item>
-                      <Menu.Item>
+                      </MenuItem>
+                      <MenuItem>
                         {({ active }) => (
                           <NavLink
                             to="/settings"
@@ -159,36 +165,40 @@ export default function Navbar() {
                               active ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
-                            Settings
+                            Profile
                           </NavLink>
                         )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
+                      </MenuItem>
+                      <div className='my-1 h-px bg-white/10' />
+                      <MenuItem>
+                        {({ focus }) => (
                           <button
-                            onClick={logout}
+                            onClick={() => {
+                              logout()
+                              navigate('/login')
+                            }}
                             className={classNames(
                               'block w-full text-left px-4 py-2 text-sm transition',
-                              active ? 'bg-white/5 text-white' : 'text-slate-300'
+                              focus ? 'bg-white/5 text-white' : 'text-slate-300'
                             )}
                           >
-                            Sign out
+                            Logout
                           </button>
                         )}
-                      </Menu.Item>
-                    </Menu.Items>
+                      </MenuItem>
+                    </MenuItems>
                   </Transition>
                 </Menu>
               )}
 
-              <Disclosure.Button className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-300 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30 lg:hidden">
+              <DisclosureButton className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-300 transition duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-300/30 lg:hidden">
                 <span className="sr-only">Open main menu</span>
                 {open ? <XMarkIcon className="h-6 w-6" aria-hidden="true" /> : <Bars3Icon className="h-6 w-6" aria-hidden="true" />}
-              </Disclosure.Button>
+              </DisclosureButton>
             </div>
           </div>
 
-          <Disclosure.Panel className="lg:hidden border-t border-white/10 bg-slate-950/95 px-4 py-5 backdrop-blur-xl">
+          <DisclosurePanel className="lg:hidden border-t border-white/10 bg-slate-950/95 px-4 py-5 backdrop-blur-xl">
             <div className="space-y-4">
               <div className="relative">
                 <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
@@ -236,18 +246,21 @@ export default function Navbar() {
                   </NavLink>
                 ) : (
                   <button
-                    onClick={logout}
+                    onClick={() => {
+                      logout()
+                      navigate('/login')
+                    }}
                     className={classNames(
                       'block w-full text-left px-4 py-2 text-sm transition'
                     )}
                   >
-                    Sign out
+                    Logout
                   </button>
 
                 )}
               </div>
             </div>
-          </Disclosure.Panel>
+          </DisclosurePanel>
         </>
       )}
     </Disclosure>
