@@ -16,4 +16,5 @@ export interface Order {
   status: OrderStatus
   createdAt: string
   items: OrderItemResponse[]
+  paymentMethod?: string
 }
