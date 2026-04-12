@@ -194,7 +194,7 @@ export const CartPage = () => {
                     shipping={shipping}
                     total={total}
                     isCheckoutDisabled={totalItems === 0}
-                    onCheckout={() => navigate("/checkout")}
+                    onCheckout={() => navigate("/user/checkout")}
                 />
 
 

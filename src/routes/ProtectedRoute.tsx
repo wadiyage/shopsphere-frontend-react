@@ -1,11 +1,20 @@
-import { Navigate, Outlet } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import { Navigate, useLocation, Outlet } from "react-router-dom"
+import { isTokenExpired } from "../utils/jwt"
 
 const ProtectedRoute = () => {
-    const { isAuthenticated } = useAuth()
+    const location = useLocation()
+    const token = localStorage.getItem("token")
 
-    if(!isAuthenticated) {
-        return <Navigate to="/login" replace />
+    if (!token || isTokenExpired(token)) {
+        localStorage.removeItem("token")
+
+        return (
+            <Navigate
+                to="/login"
+                state={{ from: location }}
+                replace
+            />
+        )
     }
 
     return <Outlet />

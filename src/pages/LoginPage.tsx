@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useLocation, useNavigate } from "react-router-dom"
 
 import { login } from "../services/authService"
 
@@ -28,6 +28,9 @@ export const LoginPage = () => {
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
+
+    const location = useLocation()
+    const from =location.state?.from?.pathname || "/"
 
     const validate = (): boolean => {
         const newErrors: FormErrors = {}
@@ -58,7 +61,7 @@ export const LoginPage = () => {
             })
 
             toast.success("Logged in successfully!")
-            navigate("/")
+            navigate(from, { replace: true })
         } catch (error) {
             console.error("Login failed", error)
             toast.error("Invalid email or password!")
