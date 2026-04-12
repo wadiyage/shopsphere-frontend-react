@@ -14,6 +14,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import PublicRoute from './routes/PublicRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import OrdersPage from './pages/OrdersPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 
@@ -35,6 +36,7 @@ function App() {
                 <Route path='/user/cart' element={<CartPage />} />
                 <Route path='/user/checkout' element={<CheckoutPage />} />
                 <Route path='/user/orders' element={<OrdersPage />} />
+                <Route path='/user/orders/:orderId' element={<OrderDetailsPage />} />
               </Route>
             </Route>
 

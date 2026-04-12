@@ -1,218 +1,124 @@
-import React, { useEffect, useState } from "react";
-import type { Order, OrderStatus } from "../types/models/Order";
-import { getMyOrders } from "../services/orderService";
-import LoadingState from "../components/common/LoadingState";
-import EmptyState from "../components/common/EmptyState";
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import type { Order, OrderStatus } from "../types/models/Order"
+import { getMyOrders } from "../services/orderService"
+import OrdersFilterTabs from "../components/orders/OrdersFilterTabs"
+import OrderCard from "../components/orders/OrderCard"
+import EmptyState from "../components/common/EmptyState"
 
-const OrdersPage: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const OrdersPage = () => {
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [activeFilter, setActiveFilter] = useState<OrderStatus | "All">("All")
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    void fetchOrders()
+  }, [])
 
   const fetchOrders = async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await getMyOrders();
-      const data: Order[] = Array.isArray(response.data) ? response.data : [];
-      setOrders(data);
+      setLoading(true)
+      setError(null)
+      const response = await getMyOrders()
+      const data: Order[] = Array.isArray(response.data) ? response.data : []
+      setOrders(data)
     } catch (err) {
-      console.error("Failed to fetch orders:", err);
-      setError("Failed to load orders. Please try again later.");
+      console.error("Failed to fetch orders:", err)
+      setError("Failed to load orders. Please try again later.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const getStatusColor = (status: OrderStatus): string => {
-    switch (status) {
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800 border border-yellow-300";
-      case "SHIPPED":
-        return "bg-blue-100 text-blue-800 border border-blue-300";
-      case "DELIVERED":
-        return "bg-green-100 text-green-800 border border-green-300";
-      default:
-        return "bg-gray-100 text-gray-800 border border-gray-300";
-    }
-  };
-
-  const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 py-12">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="mb-8 text-center text-3xl font-bold text-slate-900">
-            My Orders
-          </h1>
-          <LoadingState message="Loading your orders..." />
-        </div>
-      </div>
-    );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 py-12">
-      <div className="mx-auto max-w-5xl">
-        {/* Page Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold text-slate-900">My Orders</h1>
-          <p className="mt-2 text-slate-600">
-            {orders.length === 0 ? "You have no orders yet" : `You have ${orders.length} order${orders.length !== 1 ? "s" : ""}`}
-          </p>
-        </div>
+  const filteredOrders = useMemo(() => {
+    if (activeFilter === "All") return orders
+    return orders.filter((order) => order.status === activeFilter)
+  }, [activeFilter, orders])
 
-        {/* Error State */}
+  const ordersCount = orders.length
+
+  const navigate = useNavigate()
+
+  const renderSkeletonCard = (key: number) => (
+    <div
+      key={key}
+      className="animate-pulse overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+    >
+      <div className="border-b border-slate-100 px-6 py-5">
+        <div className="h-5 w-1/3 rounded-full bg-slate-200" />
+      </div>
+      <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.9fr_0.9fr]">
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <div className="h-12 rounded-3xl bg-slate-200" />
+            <div className="h-12 rounded-3xl bg-slate-200" />
+          </div>
+          <div className="h-10 rounded-3xl bg-slate-200" />
+        </div>
+        <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-100 p-6">
+          <div className="h-8 rounded-full bg-slate-200" />
+          <div className="h-12 rounded-full bg-slate-200" />
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="min-h-screen bg-slate-50 px-4 py-12">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <header className="space-y-3">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h1 className="text-4xl font-bold text-slate-950">My Orders</h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
+              {ordersCount === 0
+                ? "You haven't placed any orders yet."
+                : `Showing ${filteredOrders.length} of ${ordersCount} order${ordersCount !== 1 ? "s" : ""}.`}
+            </p>
+          </div>
+
+          <div className="sticky top-6 z-10 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur-sm">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+                  Filter orders
+                </p>
+              </div>
+              <OrdersFilterTabs activeFilter={activeFilter} onChange={setActiveFilter} />
+            </div>
+          </div>
+        </header>
+
         {error && (
-          <div className="mb-8 rounded-3xl border border-red-200 bg-red-50 p-4 text-red-700">
+          <div className="rounded-3xl border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm">
             <p className="text-center font-medium">{error}</p>
           </div>
         )}
 
-        {/* Empty State */}
-        {orders.length === 0 && !error && (
-          <EmptyState
-            message={
-              "You haven't placed any orders yet. Start shopping to see your orders here!"
-            }
-          />
-        )}
-
-        {/* Orders Grid */}
-        {orders.length > 0 && (
+        {loading ? (
           <div className="space-y-6">
-            {orders.map((order) => (
-              <div
-                key={order.id}
-                className="transform transition-all duration-300 ease-out hover:shadow-lg hover:scale-[1.01]"
-              >
-                <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md">
-                  {/* Order Header */}
-                  <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-slate-100 px-6 py-5">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-slate-900">
-                          Order #{order.id}
-                        </h3>
-                        <p className="mt-1 text-sm text-slate-600">
-                          {formatDate(order.createdAt)}
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-                        {/* Status Badge */}
-                        <div className="flex items-center">
-                          <span
-                            className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200 ${getStatusColor(
-                              order.status
-                            )}`}
-                          >
-                            {order.status.charAt(0).toUpperCase() +
-                              order.status.slice(1)}
-                          </span>
-                        </div>
-
-                        {/* Total Amount */}
-                        <div className="text-right">
-                          <p className="text-xs font-medium text-slate-500">
-                            Total
-                          </p>
-                          <p className="text-xl font-bold text-slate-900">
-                            {formatCurrency(order.totalAmount)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Order Items */}
-                  <div className="px-6 py-5">
-                    <div className="mb-4">
-                      <h4 className="text-sm font-semibold text-slate-700">
-                        Items ({order.items.length})
-                      </h4>
-                    </div>
-
-                    <div className="space-y-3">
-                      {order.items.map((item, index) => (
-                        <div key={index}>
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="flex-1">
-                              <p className="font-medium text-slate-900">
-                                {item.productName}
-                              </p>
-                              <p className="text-sm text-slate-600">
-                                Quantity: <span className="font-semibold">x{item.quantity}</span>
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm font-semibold text-slate-900">
-                                {formatCurrency(item.price * item.quantity)}
-                              </p>
-                              <p className="text-xs text-slate-500">
-                                {formatCurrency(item.price)} each
-                              </p>
-                            </div>
-                          </div>
-
-                          {index < order.items.length - 1 && (
-                            <div className="my-3 border-t border-slate-100" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Order Footer */}
-                  <div className="border-t border-slate-100 bg-slate-50 px-6 py-4">
-                    <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center md:justify-between">
-                      <div className="text-sm text-slate-600">
-                        Order placed:{" "}
-                        <span className="font-semibold text-slate-900">
-                          {new Date(order.createdAt).toLocaleTimeString(
-                            "en-US",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={() => console.log("View details for order", order.id)}
-                        className="rounded-lg bg-slate-900 px-6 py-2 font-semibold text-white transition-all duration-200 hover:bg-slate-800 active:scale-95"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {[1, 2, 3, 4].map(renderSkeletonCard)}
+          </div>
+        ) : ordersCount === 0 ? (
+          <EmptyState
+            message="You haven't placed any orders yet. Start shopping to see your order history."
+            buttonLabel="Start Shopping"
+            onButtonClick={() => navigate("/products")}
+          />
+        ) : filteredOrders.length === 0 ? (
+          <EmptyState
+            message="No orders match this filter. Try selecting another status or view all orders."
+          />
+        ) : (
+          <div className="space-y-6">
+            {filteredOrders.map((order) => (
+              <OrderCard key={order.id} order={order} />
             ))}
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default OrdersPage;
+export default OrdersPage
