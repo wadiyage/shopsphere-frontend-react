@@ -15,6 +15,7 @@ import PublicRoute from './routes/PublicRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 import OrdersPage from './pages/OrdersPage';
 import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 
 function App() {
   return (
@@ -25,12 +26,16 @@ function App() {
 
             <Route element={<MainLayout />}>
               <Route path='/' element={<HomePage />} />
-
               <Route path='/products' element={<ProductListingPage />} />
               <Route path='/product/:id' element={<ProductDetailsPage />} />
+            </Route>
 
-              <Route path='/user/cart' element={<CartPage />} />
-              <Route path='/user/orders' element={<OrdersPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<MainLayout />}>
+                <Route path='/user/cart' element={<CartPage />} />
+                <Route path='/user/checkout' element={<CheckoutPage />} />
+                <Route path='/user/orders' element={<OrdersPage />} />
+              </Route>
             </Route>
 
             <Route element={<PublicRoute />}>
@@ -39,26 +44,20 @@ function App() {
                 <Route path='/login' element={<LoginPage />} />
               </Route>
             </Route>
+          </Routes>
 
-            <Route element={<ProtectedRoute />}>
-              <Route element={<MainLayout />}>
-              </Route>
-            </Route>
-            
-      </Routes>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </CartProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </CartProvider>
       </AuthProvider >
     </BrowserRouter >
   );
