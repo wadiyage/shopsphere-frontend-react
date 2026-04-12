@@ -59,6 +59,7 @@ export const CheckoutPage = () => {
                     <CheckoutForm 
                         onSubmit={handleCheckout} 
                         isSubmitting={isSubmitting} 
+                        cartEmpty={cartItems.length === 0}
                     />
                 </div>
 

@@ -26,7 +26,7 @@ const OrderItemList: FC<Props> = ({ items }) => {
                         className="flex items-center gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4"
                     >
                         <img
-                            src={item.imageUrl}
+                            src={`http://localhost:8080${item.imageUrl}`}
                             alt={item.productName}
                             className="h-16 w-16 rounded-2xl object-cover"
                         />

@@ -21,7 +21,7 @@ const OrderSummary = ({ totalItems, subtotal, shipping = 0, total }: Props) => {
                         Review your totals before confirming the order.
                     </p>
                 </div>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600 text-center">
                     {totalItems} items
                 </span>
             </div>
